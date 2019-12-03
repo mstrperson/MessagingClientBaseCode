@@ -9,9 +9,11 @@ using System.Net.Sockets;
 
 namespace MessagingClientBaseCode
 {
-    public class ServerConnection
+    public class ServerConnection : IDisposable
     {
         private Socket serverConnection;
+
+        public bool StillConnected => serverConnection.Connected;
 
         private Thread ReadThread;
 
@@ -35,7 +37,7 @@ namespace MessagingClientBaseCode
         {
             serverConnection = new Socket(serverIP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             serverConnection.Connect(new IPEndPoint(serverIP, port));
-            serverConnection.Send(Encoding.ASCII.GetBytes(string.Format("{0}{1}", name, Message.EOM)));
+            serverConnection.Send(Encoding.UTF8.GetBytes(string.Format("{0}{1}", name, Message.EOM)));
 
             RecievedMessages = new List<string>();
 
@@ -45,7 +47,15 @@ namespace MessagingClientBaseCode
 
         public void Send(Message message)
         {
-            serverConnection.Send(message.RawMessage);
+            try
+            {
+                serverConnection.Send(message.RawMessage);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Failed to send...");
+                Console.WriteLine(e.Message);
+            }
         }
 
         private void ReadRun()
@@ -61,11 +71,11 @@ namespace MessagingClientBaseCode
                     {
                         int byteCount = serverConnection.Receive(buffer);
 
-                        readStr += Encoding.ASCII.GetString(buffer, 0, byteCount);
+                        readStr += Encoding.UTF8.GetString(buffer, 0, byteCount);
                         if (readStr.EndsWith(Message.EOM))
                         {
                             readStr = readStr.Replace(Message.EOM, "");
-                            readStr = readStr.Replace(Message.Separator, ":  ");
+                            readStr = readStr.Replace(Message.SOT, ":  ");
                             RecievedMessages.Add(readStr);
                             break;
                         }
@@ -77,6 +87,13 @@ namespace MessagingClientBaseCode
                     }
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            ReadThread.Abort();
+            serverConnection.Close();
+            serverConnection.Dispose();
         }
     }
 }

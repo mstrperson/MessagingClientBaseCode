@@ -8,8 +8,8 @@ namespace MessagingClientBaseCode
 {
     public class Message
     {
-        public static readonly string Separator = "|";
-        public static readonly string EOM = "<EOM>";
+        public static readonly string SOT = "\u0002"; // UTF8 Start of Text character
+        public static readonly string EOM = "\u0004"; // UTF8 End of Transmission character.
 
         private List<string> To;
 
@@ -29,9 +29,9 @@ namespace MessagingClientBaseCode
                     first = false;
                 }
 
-                message += string.Format("{0}{1}{2}", Separator, Text, EOM);
+                message += string.Format("{0}{1}{2}", SOT, Text, EOM);
 
-                return Encoding.ASCII.GetBytes(message);
+                return Encoding.UTF8.GetBytes(message);
             }
         }
 

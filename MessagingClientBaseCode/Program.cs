@@ -16,6 +16,9 @@ namespace MessagingClientBaseCode
 
         static void Main(string[] args)
         {
+            Console.InputEncoding = Encoding.UTF8;
+            Console.OutputEncoding = Encoding.UTF8;
+
             serverConnection = new ServerConnection(IPAddress.Loopback, 12345, "tester");
 
             RecieveThread = new Thread(new ThreadStart(DisplayMessages));
@@ -33,11 +36,13 @@ namespace MessagingClientBaseCode
                     serverConnection.Send(message);
                 }
             }
+
+            serverConnection.Dispose();
         }
 
         static void DisplayMessages()
         {
-            while(true)
+            while(serverConnection.StillConnected)
             {
                 if(serverConnection.HasMessages)
                 {
