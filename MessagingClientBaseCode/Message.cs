@@ -26,6 +26,7 @@ namespace MessagingClientBaseCode
                 foreach(string recipient in To)
                 {
                     message += string.Format("{0}{1}", first ? "" : ",", recipient);
+                    first = false;
                 }
 
                 message += string.Format("{0}{1}{2}", Separator, Text, EOM);
