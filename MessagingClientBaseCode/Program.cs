@@ -18,8 +18,11 @@ namespace MessagingClientBaseCode
         {
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
-            
-            serverConnection = new ServerConnection(new IPAddress(new byte[] { 10, 0, 4, 86 }), 12345, "pc");
+
+            Console.Write("Enter your name:  ");
+            string name = Console.ReadLine();
+
+            serverConnection = new ServerConnection(new IPAddress(new byte[] { 10, 0, 4, 86 }), 12345, name);
 
             RecieveThread = new Thread(new ThreadStart(DisplayMessages));
             RecieveThread.Start();
