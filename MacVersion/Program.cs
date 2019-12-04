@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading;
 
 namespace MacVersion
@@ -12,10 +13,13 @@ namespace MacVersion
 
     static void Main(string[] args)
     {
-        //Console.InputEncoding = Encoding.UTF8;
-        //Console.OutputEncoding = Encoding.UTF8;
+        Console.InputEncoding = Encoding.UTF8;
+        Console.OutputEncoding = Encoding.UTF8;
 
-        serverConnection = new ServerConnection(new IPAddress(new byte[] { 10, 0, 4, 86 }), 12345, "tester");
+            Console.Write("Enter your name:  ");
+            string name = Console.ReadLine();
+
+        serverConnection = new ServerConnection(new IPAddress(new byte[] { 10, 0, 4, 86 }), 12345, name);
 
         RecieveThread = new Thread(new ThreadStart(DisplayMessages));
         RecieveThread.Start();
