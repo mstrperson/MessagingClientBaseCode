@@ -19,7 +19,7 @@ namespace MessagingClientBaseCode
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
 
-            serverConnection = new ServerConnection(IPAddress.Loopback, 12345, "tester");
+            serverConnection = new ServerConnection(new IPAddress(new byte[] { 10, 0, 4, 86 }), 12345, "pc");
 
             RecieveThread = new Thread(new ThreadStart(DisplayMessages));
             RecieveThread.Start();
