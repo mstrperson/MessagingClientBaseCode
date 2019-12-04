@@ -18,13 +18,13 @@ namespace MessagingClientBaseCode
         {
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
-
+            
             serverConnection = new ServerConnection(new IPAddress(new byte[] { 10, 0, 4, 86 }), 12345, "pc");
 
             RecieveThread = new Thread(new ThreadStart(DisplayMessages));
             RecieveThread.Start();
             string input = "";
-
+            Console.ReadLine();
             while(!input.Equals("quit"))
             {
                 Console.Write(">>  ");
